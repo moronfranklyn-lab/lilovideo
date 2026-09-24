@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  方向 D：字标 L（Monogram L）
+  把字母 L 与播放三角合并为一个符号。
+  优点：作为产品字标最容易被记住，且不依赖「相机 / 胶片」这类通用图形，
+  更像一个品牌而非一个功能图标。
+  缺点：语义不如 A、B 直白，需要配合产品名出现。
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Lilovideo">
+  <defs>
+    <linearGradient id="aD-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FF9A6B"/>
+      <stop offset="100%" stop-color="#E8642F"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="0" width="64" height="64" rx="14" fill="#1B1B23"/>
+
+  <!-- L 的竖笔 -->
+  <path d="M21 16 V42" stroke="url(#aD-grad)" stroke-width="6.4" stroke-linecap="round"/>
+
+  <!-- L 的横笔，同时充当播放符的底边 -->
+  <path d="M21 42 H44" stroke="url(#aD-grad)" stroke-width="6.4" stroke-linecap="round"/>
+
+  <!-- 播放三角：嵌在 L 的转角内侧 -->
+  <path d="M31 28 L43 35 L31 42 Z"
+        fill="#FF7A45" stroke="#0D0D12" stroke-width="2.6" stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,25 @@
+{
+  "session_id": "verify_llm_switch",
+  "records": [
+    {
+      "stage": "script_generation",
+      "model_id": "deepseek-v4-1-flash-260910",
+      "amount": 0.001224,
+      "billing": "per_token",
+      "verified": false,
+      "breakdown": "输入 52 tokens × 1.0 元/百万；输出 293 tokens × 4.0 元/百万",
+      "at": "2026-09-23T03:49:36.314051+00:00",
+      "usage": {
+        "model_id": "deepseek-v4-1-flash-260910",
+        "input_tokens": 52,
+        "output_tokens": 293,
+        "cached_input_tokens": 0,
+        "seconds": 0.0,
+        "resolution": null,
+        "audio": null,
+        "images": 0
+      }
+    }
+  ],
+  "updated_at": "2026-09-23T03:49:36.314226+00:00"
+}

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  方向 A：光圈（Aperture）
+  取意「镜头」——视频的起点是光穿过镜头。
+  六片光圈叶构成一个负空间六边形，中心是强调色光点。
+  优点：几何感强，小尺寸下轮廓仍清晰，与「影像」语义直接相关。
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Lilovideo">
+  <defs>
+    <linearGradient id="aA-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FF9A6B"/>
+      <stop offset="100%" stop-color="#E8642F"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 背板：与界面表面同色，保证在任意底色上都有一致的辨识度 -->
+  <rect x="0" y="0" width="64" height="64" rx="14" fill="#1B1B23"/>
+
+  <!-- 六片光圈叶：用六条从外缘指向中心的斜边构成负空间六边形 -->
+  <g stroke="url(#aA-grad)" stroke-width="3.2" stroke-linecap="round" fill="none">
+    <path d="M32 11 L49 21"/>
+    <path d="M53 32 L43 49"/>
+    <path d="M32 53 L15 43"/>
+    <path d="M11 32 L21 15"/>
+    <path d="M21 15 L49 21" opacity="0.55"/>
+    <path d="M43 49 L15 43" opacity="0.55"/>
+  </g>
+
+  <!-- 中心光点 -->
+  <circle cx="32" cy="32" r="4.2" fill="#FF7A45"/>
+</svg>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>图标真实尺寸对比</title>
+<style>
+  body {
+    margin: 0; padding: 32px;
+    background: #0D0D12; color: #F0F0F5;
+    font-family: -apple-system, "PingFang SC", system-ui, sans-serif;
+  }
+  h1 { font-size: 18px; font-weight: 600; margin: 0 0 4px; }
+  .sub { color: #A0A0B0; font-size: 12px; margin-bottom: 24px; }
+
+  table { border-collapse: collapse; }
+  th, td { padding: 10px 16px; text-align: left; border-bottom: 1px solid #2B2B36; vertical-align: middle; }
+  th { font-size: 11px; color: #A0A0B0; font-weight: 500; text-align: center; }
+  td.name { font-size: 13px; font-weight: 600; white-space: nowrap; }
+  td.cell { text-align: center; }
+
+  /* 真实尺寸格：图标按真实像素渲染，外围放大展示以便检视 */
+  .real { display: inline-block; image-rendering: auto; vertical-align: middle; }
+
+  /* 逐像素放大 6 倍，用于看清 16px 下到底还剩什么 */
+  .zoom {
+    display: inline-block;
+    image-rendering: pixelated;
+    transform-origin: center;
+  }
+  .zoomwrap {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: #15151B; border: 1px solid #2B2B36; border-radius: 8px;
+    padding: 6px;
+  }
+  .note { font-size: 11px; color: #A0A0B0; margin-top: 20px; line-height: 1.7; }
+  .verdict { font-size: 12px; }
+  .ok { color: #4FD79B; }
+  .warn { color: #F7C25E; }
+  .bad { color: #F4706F; }
+</style>
+</head>
+<body>
+  <h1>图标真实尺寸对比</h1>
+  <div class="sub">左侧为真实像素尺寸；右侧把 16px 放大 6 倍，用于看清该尺寸下实际还剩多少细节</div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="text-align:left">方案</th>
+        <th>64 px</th>
+        <th>32 px</th>
+        <th>16 px</th>
+        <th>16px 放大 6 倍</th>
+        <th style="text-align:left">16px 可辨识度</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="name">A · 光圈</td>
+        <td class="cell"><img class="real" src="concept-A-aperture.svg" width="64" height="64" alt=""></td>
+        <td class="cell"><img class="real" src="concept-A-aperture.svg" width="32" height="32" alt=""></td>
+        <td class="cell"><img class="real" src="concept-A-aperture.svg" width="16" height="16" alt=""></td>
+        <td class="cell"><span class="zoomwrap"><img class="zoom" src="concept-A-aperture.svg" width="96" height="96" style="width:96px;height:96px" alt=""></span></td>
+        <td class="verdict warn">线太细，叶形糊掉</td>
+      </tr>
+      <tr>
+        <td class="name">B · 框中有光</td>
+        <td class="cell"><img class="real" src="concept-B-play-frame.svg" width="64" height="64" alt=""></td>
+        <td class="cell"><img class="real" src="concept-B-play-frame.svg" width="32" height="32" alt=""></td>
+        <td class="cell"><img class="real" src="concept-B-play-frame.svg" width="16" height="16" alt=""></td>
+        <td class="cell"><span class="zoomwrap"><img class="zoom" src="concept-B-play-frame.svg" width="96" height="96" alt=""></span></td>
+        <td class="verdict ok">仍能读出「视频」</td>
+      </tr>
+      <tr>
+        <td class="name">C · 连成一线</td>
+        <td class="cell"><img class="real" src="concept-C-cuts-to-one.svg" width="64" height="64" alt=""></td>
+        <td class="cell"><img class="real" src="concept-C-cuts-to-one.svg" width="32" height="32" alt=""></td>
+        <td class="cell"><img class="real" src="concept-C-cuts-to-one.svg" width="16" height="16" alt=""></td>
+        <td class="cell"><span class="zoomwrap"><img class="zoom" src="concept-C-cuts-to-one.svg" width="96" height="96" alt=""></span></td>
+        <td class="verdict bad">三段消失，只剩箭头</td>
+      </tr>
+      <tr>
+        <td class="name">D · 字标 L</td>
+        <td class="cell"><img class="real" src="concept-D-monogram-l.svg" width="64" height="64" alt=""></td>
+        <td class="cell"><img class="real" src="concept-D-monogram-l.svg" width="32" height="32" alt=""></td>
+        <td class="cell"><img class="real" src="concept-D-monogram-l.svg" width="16" height="16" alt=""></td>
+        <td class="cell"><span class="zoomwrap"><img class="zoom" src="concept-D-monogram-l.svg" width="96" height="96" alt=""></span></td>
+        <td class="verdict bad">笔画糊成黑块</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="note">
+    判断依据：16px 是浏览器标签页与书签栏的实际显示尺寸，
+    也是图标能否被记住的下限。若某方案在 16px 下丢失关键结构，就不适合作为主图标。
+  </div>
+</body>
+</html>

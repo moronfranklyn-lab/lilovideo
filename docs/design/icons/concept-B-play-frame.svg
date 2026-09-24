@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  方向 B：框中有光（Play in Frame）
+  取意「分镜框 + 播放」——本产品最核心的概念就是「一格格分镜最终连成成片」。
+  圆角方框代表分镜画幅，中间三角代表播放，右上小点代表「创意点子」。
+  优点：语义最直白，用户一眼就懂这是视频产品。
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Lilovideo">
+  <defs>
+    <linearGradient id="aB-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FF9A6B"/>
+      <stop offset="100%" stop-color="#E8642F"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="0" width="64" height="64" rx="14" fill="#1B1B23"/>
+
+  <!-- 分镜画幅 -->
+  <rect x="12" y="15" width="40" height="34" rx="7"
+        fill="none" stroke="url(#aB-grad)" stroke-width="3.2"/>
+
+  <!-- 播放三角 -->
+  <path d="M27.5 23.5 L41 32 L27.5 40.5 Z"
+        fill="#FF7A45" stroke="#FF7A45" stroke-width="2.4" stroke-linejoin="round"/>
+
+  <!-- 右上「创意点子」：暗示「一句话进来」 -->
+  <circle cx="49" cy="15" r="3.6" fill="#FF7A45"/>
+</svg>

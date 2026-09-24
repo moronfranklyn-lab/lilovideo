@@ -1,0 +1,25 @@
+{
+  "session_id": "verify_cost_wiring",
+  "records": [
+    {
+      "stage": "video_generation",
+      "model_id": "doubao-seedance-2-0-fast-260128",
+      "amount": 1.873606,
+      "billing": "per_token",
+      "verified": true,
+      "breakdown": "输出 50638 tokens × 37.0 元/百万",
+      "at": "2026-09-23T03:42:11.257404+00:00",
+      "usage": {
+        "model_id": "doubao-seedance-2-0-fast-260128",
+        "input_tokens": 0,
+        "output_tokens": 50638,
+        "cached_input_tokens": 0,
+        "seconds": 0.0,
+        "resolution": null,
+        "audio": null,
+        "images": 0
+      }
+    }
+  ],
+  "updated_at": "2026-09-23T03:42:11.257721+00:00"
+}

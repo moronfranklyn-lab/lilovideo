@@ -1,0 +1,58 @@
+.masked-heading {
+  position: relative;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  text-wrap: balance;
+  -webkit-font-smoothing: antialiased;
+  --masked-duration: 1.1s;
+  --masked-stagger: 0.09s;
+  --masked-parallax: 0px;
+}
+
+/* 文字本身透明，笔画内显示背景图（background-clip: text） */
+.masked-heading__text {
+  display: inline;
+  color: transparent;
+  background-repeat: no-repeat;
+  background-position:
+    calc(50% + var(--masked-parallax, 0px))
+    center;
+  -webkit-background-clip: text;
+  background-clip: text;
+  will-change: background-position, clip-path;
+}
+
+/* ── rise：文字从下向上升起（裁切 + 上移），带柔缓曲线 ── */
+.masked-heading--rise .masked-heading__text {
+  clip-path: inset(0 0 100% 0);
+  transform: translateY(18%);
+  transition:
+    clip-path var(--masked-duration) cubic-bezier(0.16, 1, 0.3, 1),
+    transform var(--masked-duration) cubic-bezier(0.16, 1, 0.3, 1);
+}
+.masked-heading--rise.masked-heading--active .masked-heading__text {
+  clip-path: inset(0 0 0 0);
+  transform: translateY(0);
+}
+
+/* ── fade：淡入 ── */
+.masked-heading--fade .masked-heading__text {
+  opacity: 0;
+  transition: opacity var(--masked-duration) ease;
+}
+.masked-heading--fade.masked-heading--active .masked-heading__text {
+  opacity: 1;
+}
+
+/* 无障碍：文字语义仍可读（color transparent 不影响阅读器） */
+
+@media (prefers-reduced-motion: reduce) {
+  .masked-heading--rise .masked-heading__text,
+  .masked-heading--fade .masked-heading__text {
+    clip-path: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+    transition: none !important;
+  }
+}

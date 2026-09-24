@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  概念 3 · 环缝（阈值）
+  谱系：日本纹章（Kamon）
+  种子：门缝是一圈之中那个被切掉的角度。
+
+  构造：一个偏心圆环（外圆挖内圆），从上方切掉一个扇形缺口。
+  偏心使形有张力，不落入「完美同心圆」的惰性对称。
+  读法：一段被封住的时间，只在一处开口。
+
+  技法说明：
+  - 环体是一条 path：外圆 + 内圆，evenodd 挖出真实的孔。
+  - 缺口由扇形减去形成，与环体合为一条 path，保证单色下仍是同一个实体。
+  - 最细处为环宽，按规范控制在 12 单位左右，16px 下不至于消失。
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Lilovideo">
+  <g id="mark">
+    <path id="ring-with-notch" fill="#FF7A45" fill-rule="evenodd"
+          d="M50 12 A38 38 0 1 1 49.9 12 Z
+             M50 26 A24 24 0 1 0 50.1 26 Z
+             M38 10 L62 10 L58 30 L42 30 Z"/>
+  </g>
+</svg>

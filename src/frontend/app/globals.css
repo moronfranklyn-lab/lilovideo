@@ -1,0 +1,1484 @@
+@import "tailwindcss";
+
+:root {
+    /*
+     * Primitive tokens: only this file should reference these directly.
+     *
+     * 亮色主题（Ethan 2026-09-23 要求：透明带一点白，全局规则从暗色翻回亮色）：
+     *   - bg-* 类（背景）取低号色阶 → 浅色
+     *   - text-* 类（文字）取中高号色阶 → 深色
+     * 因此低号 = 浅、高号 = 深。修改时请保持这个方向，否则会出现
+     * 「深色文字落在深色背景上」的不可读组合。
+     */
+    --color-white: #ffffff;            /* 表面：白色 */
+    --color-gray-25: #f6f6fa;         /* 页面底：透明带一点白 */
+    --color-gray-50: #f0f0f5;         /* 页面底（次） */
+    --color-gray-100: #eaeaf0;        /* 浅面板 */
+    --color-gray-175: #e3e3ea;
+    --color-gray-200: #d5d5de;        /* 描边 */
+    --color-gray-300: #c8c8d2;        /* 强描边 */
+    --color-gray-400: #6f6f7d;        /* 次要文字 */
+    --color-gray-450: #636370;
+    --color-gray-500: #575763;        /* 弱化文字 */
+    --color-gray-600: #45454f;
+    --color-gray-700: #32323b;        /* 主文字 */
+    --color-gray-800: #212129;
+    --color-gray-900: #15151b;
+    --color-gray-950: #0e0e13;
+    --color-black-soft: #1f1f26;      /* 近黑 */
+    --color-black-a4: rgba(0, 0, 0, 0.04);
+    --color-black-a6: rgba(0, 0, 0, 0.06);
+    --color-black-a8: rgba(0, 0, 0, 0.08);
+    --color-black-a10: rgba(0, 0, 0, 0.1);
+    --color-black-a15: rgba(0, 0, 0, 0.15);
+    --color-shadow-black-a8: rgba(0, 0, 0, 0.08);
+    --color-scrim-black-a50: rgba(0, 0, 0, 0.55);
+    --color-red-500: #f2555a;
+    --color-red-400: #e5484d;
+    --color-red-700: #c22b35;
+    --color-red-a10: rgba(242, 85, 90, 0.14);
+    --color-red-50: rgba(242, 85, 90, 0.12);
+    --color-red-100: rgba(242, 85, 90, 0.18);
+    --color-red-200: rgba(242, 85, 90, 0.26);
+    --color-blue-50: rgba(90, 150, 245, 0.12);
+    --color-blue-100: rgba(90, 150, 245, 0.18);
+    --color-blue-200: rgba(90, 150, 245, 0.26);
+    --color-blue-300: #6f9ce8;
+    --color-blue-400: #4a80dd;
+    --color-blue-500: #3a6fd4;
+    --color-blue-600: #3363c0;
+    --color-blue-700: #2a54a8;
+    --color-green-50: rgba(62, 207, 142, 0.12);
+    --color-green-200: rgba(62, 207, 142, 0.24);
+    --color-green-300: #3fb983;
+    --color-green-500: #2fae75;
+    --color-green-600: #289a66;
+    --color-green-700: #208454;
+    --color-amber-50: rgba(245, 181, 68, 0.12);
+    --color-amber-100: rgba(245, 181, 68, 0.18);
+    --color-amber-200: rgba(245, 181, 68, 0.26);
+    --color-amber-400: #e0a83c;
+    --color-amber-500: #d39227;
+    --color-amber-600: #b87a1a;
+    --color-amber-700: #9c6411;
+    --color-amber-800: #815108;
+    --color-amber-900: #673f05;
+    --color-purple-50: rgba(160, 130, 245, 0.12);
+    --color-purple-100: rgba(160, 130, 245, 0.18);
+    --color-purple-200: rgba(160, 130, 245, 0.26);
+    --color-purple-300: #8f74e8;
+    --color-purple-400: #7d62dd;
+    --color-purple-500: #6f52d0;
+    --color-purple-600: #5f43ba;
+    --color-purple-700: #5036a3;
+    --color-purple-800: #402b85;
+    --color-purple-900: #302167;
+    --color-orange-50: rgba(255, 122, 69, 0.12);
+    --color-orange-300: #ff8a58;
+    --color-orange-500: #ff7a45;
+    --color-orange-600: #f06a36;
+    --color-orange-700: #d95a2b;
+    --radius-6: 6px;
+    --radius-8: 8px;
+    --radius-12: 12px;
+    --radius-16: 16px;
+    --radius-20: 20px;
+    --radius-pill: 9999px;
+
+    /*
+     * Semantic tokens used by the Lilovideo application surfaces.
+     *
+     * 亮色主题：语义层在基础层之上重新指派角色，不直接引用原始色值。
+     * 注意一处显式指派（不依赖基础层自动跟随）：
+     *   --lp-text-inverse  必须为白，用于主操作/删除等强调色按钮上的文字
+     */
+    --background: var(--color-gray-25);
+    --foreground: var(--color-gray-700);
+    --font-app: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", system-ui, "Segoe UI", "Microsoft YaHei", sans-serif;
+    --font-display: Georgia, "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", "SimSun", serif;
+    --lp-canvas-app: var(--color-gray-25);
+    --lp-surface: var(--color-white);
+    --lp-surface-subtle: var(--color-gray-100);
+    --lp-surface-soft: var(--color-gray-175);
+    --lp-text-strong: var(--color-gray-950);
+    --lp-text-default: var(--color-gray-700);
+    --lp-text-inverse: #ffffff;
+    --lp-text-muted: var(--color-gray-600);
+    --lp-text-subtle: var(--color-gray-400);
+    --lp-text-disabled: var(--color-gray-500);
+    --lp-action-primary: #8b5cf6;
+    --lp-accent: #8b5cf6;
+    --lp-accent-hover: #7c3aed;
+    --lp-accent-active: #6d28d9;   /* 按下态：比常态更深，配合 1px 下沉形成按压感 */
+    --lp-accent-soft: rgba(139, 92, 246, 0.14);
+    /* 禁用态的主操作按钮：保留强调色关系，但明度压低，区别于可点击状态 */
+    --lp-accent-disabled-bg: rgba(139, 92, 246, 0.16);
+    --lp-accent-disabled: #a78bfa;
+    --lp-error: var(--color-red-500);
+    --lp-error-hover: var(--color-red-400);
+    --lp-error-active: var(--color-red-700);
+    --lp-error-soft: var(--color-red-a10);
+    --lp-border-subtle: var(--color-gray-200);
+    --lp-border-divider: var(--color-gray-200);
+    --lp-border-strong: var(--color-gray-300);
+    --lp-surface-hover: var(--color-black-a4);
+    --lp-surface-active: var(--color-black-a6);
+    --lp-surface-strong: var(--color-black-a10);
+    --lp-border-medium: var(--color-black-a15);
+    --lp-shadow-raised: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --lp-shadow-card-hover: 0 8px 20px rgba(0, 0, 0, 0.5);
+    --lp-shadow-popover: 0 8px 24px rgba(0, 0, 0, 0.6);
+    --lp-shadow-modal: 0 20px 40px rgba(0, 0, 0, 0.7);
+    --lp-scrim-modal: var(--color-scrim-black-a50);
+    --lp-radius-tag: var(--radius-6);
+    --lp-radius-compact: var(--radius-8);
+    --lp-radius-control: var(--radius-12);
+    --lp-radius-card: var(--radius-16);
+    --lp-radius-feature: var(--radius-20);
+    --lp-radius-pill: var(--radius-pill);
+    --lp-opacity-disabled: 0.4;
+}
+
+/* 键盘焦点可见性：淡中性灰（slate-500 #64748b），仅键盘导航时出现 */
+:focus-visible {
+    outline: 2px solid #64748b;
+    outline-offset: 2px;
+}
+
+@theme inline {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-ds-bg: var(--lp-canvas-app);
+    --color-ds-sidebar: var(--lp-surface);
+    --color-ds-input: var(--lp-border-subtle);
+    --color-ds-input-bg: var(--lp-surface);
+    --color-ds-text: var(--lp-text-default);
+    --color-ds-hover: var(--lp-surface-hover);
+    --color-ds-blue: var(--lp-accent);
+}
+
+html,
+body {
+    min-height: 100%;
+    background: var(--lp-canvas-app);
+}
+
+body {
+    color: var(--lp-text-default);
+    font-family: var(--font-app);
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: var(--lp-radius-pill);
+    background: var(--lp-border-strong);
+}
+
+/* Application shell */
+.lilo-shell {
+    position: relative;
+    min-height: 100vh;
+    background: var(--lp-canvas-app) !important;
+    color: var(--lp-text-default);
+}
+
+.lilo-shell::before,
+.lilo-shell::after,
+.lilo-home::before {
+    content: none;
+}
+
+.lilo-sidebar {
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    height: auto;
+    overflow: hidden;
+    border: 0 !important;
+    border-right: 1px solid var(--lp-border-subtle) !important;
+    border-radius: 0;
+    background: var(--lp-surface) !important;
+    box-shadow: none !important;
+}
+
+.lilo-sidebar-brand {
+    height: 72px !important;
+    padding-inline: 24px !important;
+    border-bottom-color: transparent !important;
+}
+
+.lilo-sidebar-brand img {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--lp-radius-compact);
+}
+
+.lilo-sidebar-brand span {
+    color: var(--lp-text-strong) !important;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+.lilo-sidebar-nav {
+    padding: 8px 12px 16px !important;
+}
+
+.lilo-sidebar-link {
+    min-height: 44px;
+    padding-inline: 12px !important;
+    border-radius: var(--lp-radius-control) !important;
+    color: var(--lp-text-muted) !important;
+    font-size: 14px;
+    font-weight: 400 !important;
+}
+
+.lilo-sidebar-link:hover {
+    background: var(--lp-surface-hover) !important;
+    color: var(--lp-text-strong) !important;
+}
+
+.lilo-sidebar-link.bg-blue-50 {
+    background: var(--lp-surface-soft) !important;
+    color: var(--lp-text-strong) !important;
+    font-weight: 500 !important;
+}
+
+.lilo-task-panel {
+    min-height: 144px;
+    padding: 16px !important;
+    border-top: 1px solid var(--lp-border-divider) !important;
+}
+
+.lilo-task-panel > div:first-child span {
+    color: var(--lp-text-muted) !important;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.lilo-task-panel > div:last-child > div:not(.space-y-1\.5) {
+    border-color: transparent !important;
+    background: var(--lp-surface-subtle);
+    color: var(--lp-text-subtle) !important;
+}
+
+.lilo-task-item {
+    border-color: transparent !important;
+    border-radius: var(--lp-radius-compact) !important;
+    background: transparent !important;
+}
+
+.lilo-task-item:hover {
+    border-color: transparent !important;
+    background: var(--lp-surface-hover) !important;
+}
+
+.lilo-task-panel .bg-blue-500 {
+    background: var(--lp-accent) !important;
+}
+
+.lilo-task-panel .text-blue-600 {
+    color: var(--lp-accent) !important;
+}
+
+.lilo-sidebar-footer {
+    border-top-color: var(--lp-border-divider) !important;
+    padding: 12px !important;
+}
+
+.lilo-sidebar-footer > button {
+    min-height: 44px;
+    border-radius: var(--lp-radius-control) !important;
+    color: var(--lp-text-muted) !important;
+    font-weight: 400 !important;
+}
+
+.lilo-sidebar-footer > button:hover {
+    background: var(--lp-surface-hover) !important;
+    color: var(--lp-text-strong) !important;
+}
+
+.lilo-sidebar-footer > button.bg-blue-50 {
+    background: var(--lp-surface-soft) !important;
+    color: var(--lp-text-strong) !important;
+    font-weight: 500 !important;
+}
+
+.lilo-settings-menu {
+    padding: 6px !important;
+    border-color: var(--lp-border-subtle) !important;
+    border-radius: var(--lp-radius-control) !important;
+    background: var(--lp-surface) !important;
+    box-shadow: var(--lp-shadow-popover) !important;
+}
+
+.lilo-settings-menu button {
+    border-radius: var(--lp-radius-compact) !important;
+    color: var(--lp-text-default) !important;
+    font-weight: 400 !important;
+}
+
+.lilo-settings-menu button:hover {
+    background: var(--lp-surface-hover) !important;
+    color: var(--lp-text-strong) !important;
+}
+
+.lilo-sidebar-toggle,
+.lilo-sidebar + button {
+    width: 28px !important;
+    height: 44px !important;
+    border-color: var(--lp-border-subtle) !important;
+    border-radius: 0 var(--lp-radius-control) var(--lp-radius-control) 0 !important;
+    background: var(--lp-surface) !important;
+    color: var(--lp-text-subtle) !important;
+    box-shadow: none !important;
+}
+
+.lilo-sidebar-toggle:hover,
+.lilo-sidebar + button:hover {
+    width: 28px !important;
+    border-color: var(--lp-border-strong) !important;
+    background: var(--lp-surface-subtle) !important;
+    color: var(--lp-text-strong) !important;
+}
+
+.lilo-main {
+    position: relative;
+    min-height: 100vh;
+    background: var(--lp-canvas-app);
+}
+
+.lilo-shell header {
+    top: 0;
+    right: 0;
+    left: var(--app-sidebar-width);
+    border: 0;
+    border-bottom: 1px solid var(--lp-border-divider);
+    border-radius: 0;
+    background: var(--lp-surface);
+    box-shadow: none;
+}
+
+.lilo-topbar-home,
+.lilo-topbar-home + div {
+    display: none !important;
+}
+
+/* Home workspace */
+.lilo-home {
+    position: relative;
+    min-height: 100vh;
+    background: var(--lp-canvas-app) !important;
+}
+
+.lilo-home-main {
+    max-width: 1040px !important;
+    padding: 72px 32px 40px !important;
+}
+
+.lilo-hero-title {
+    margin-bottom: 32px !important;
+    text-align: center !important;
+}
+
+.lilo-hero-title > div {
+    margin-bottom: 8px !important;
+}
+
+.lilo-hero-title h1 {
+    color: var(--lp-text-strong) !important;
+    font-size: 32px !important;
+    font-weight: 600 !important;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+}
+
+.lilo-masked-title {
+    font-family: var(--font-display);
+    font-size: 32px !important;
+    font-weight: 600 !important;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+}
+
+.lilo-hero-title p {
+    color: var(--lp-text-muted) !important;
+    font-size: 14px !important;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+.lilo-composer {
+    /* 外观（玻璃底/圆角/描边/阴影）由 BorderGlow 组件提供，此处只保留尺寸 */
+    min-height: 150px;
+    padding: 16px 18px !important;
+}
+
+.lilo-prompt-input {
+    min-height: 88px !important;
+    padding: 0;
+    color: var(--lp-text-default) !important;
+    font-family: var(--font-app);
+    font-size: 16px !important;
+    font-weight: 400;
+    line-height: 1.6;
+}
+
+.lilo-prompt-input::placeholder {
+    color: var(--lp-text-subtle) !important;
+}
+
+.lilo-composer-toolbar {
+    gap: 16px;
+    margin-top: 12px !important;
+    padding-top: 12px !important;
+    border-top: 1px solid var(--lp-border-divider) !important;
+}
+
+.lilo-composer-toolbar > div {
+    flex-wrap: wrap;
+}
+
+.lilo-tool-button {
+    min-height: 32px;
+    padding: 6px 12px !important;
+    border: 1px solid var(--lp-border-subtle);
+    border-radius: var(--lp-radius-pill) !important;
+    background: var(--lp-surface) !important;
+    color: var(--lp-text-muted) !important;
+    font-size: 12px !important;
+    font-weight: 400 !important;
+}
+
+.lilo-tool-button:hover {
+    border-color: var(--lp-border-strong);
+    background: var(--lp-surface-hover) !important;
+    color: var(--lp-text-strong) !important;
+}
+
+.lilo-tool-button.bg-blue-50 {
+    border-color: var(--lp-action-primary);
+    background: var(--lp-action-primary) !important;
+    color: var(--lp-text-inverse) !important;
+}
+
+.lilo-episodes-popover {
+    padding: 16px !important;
+    border-color: var(--lp-border-subtle) !important;
+    border-radius: var(--lp-radius-control) !important;
+    background: var(--lp-surface) !important;
+    box-shadow: var(--lp-shadow-popover) !important;
+}
+
+.lilo-episode-count {
+    border-radius: var(--lp-radius-tag) !important;
+    background: var(--lp-surface-soft) !important;
+    color: var(--lp-text-strong) !important;
+    font-size: 12px !important;
+    font-weight: 400 !important;
+}
+
+.lilo-upload-button,
+.lilo-action-secondary,
+.lilo-action-primary {
+    min-height: 40px;
+    padding-inline: 18px !important;
+    border-radius: var(--lp-radius-control) !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    box-shadow: none !important;
+}
+
+.lilo-upload-button {
+    border: 1px solid var(--lp-border-subtle) !important;
+    background: var(--lp-surface) !important;
+    color: var(--lp-text-default) !important;
+    font-weight: 400 !important;
+}
+
+.lilo-upload-button:hover:not(:disabled) {
+    border-color: var(--lp-border-strong) !important;
+    background: var(--lp-surface-hover) !important;
+}
+
+.lilo-action-secondary:not(:disabled) {
+    border: 1px solid var(--lp-border-subtle) !important;
+    background: var(--lp-surface) !important;
+    color: var(--lp-text-default) !important;
+}
+
+.lilo-action-secondary:hover:not(:disabled) {
+    border-color: var(--lp-border-strong) !important;
+    background: var(--lp-surface-hover) !important;
+}
+
+.lilo-action-primary:not(:disabled) {
+    min-width: 104px;
+    border: 1px solid var(--lp-action-primary) !important;
+    background: var(--lp-action-primary) !important;
+    color: var(--lp-text-inverse) !important;
+}
+
+.lilo-action-primary:hover:not(:disabled) {
+    opacity: 0.92;
+    border-color: var(--lp-accent-hover) !important;
+    background: var(--lp-accent-hover) !important;
+}
+
+/*
+ * 按下反馈。参考 uiverse.io 的 modern-dragon-25 思路（按下时轻微下沉 + 阴影收拢），
+ * 但不用它的硬边 3D 投影——那与本站的克制基调冲突，改为 1px 位移的轻反馈。
+ * 作用有二：给出「确实点到了」的确定性，并降低连点造成的重复提交。
+ */
+.lilo-action-primary:active:not(:disabled) {
+    transform: translateY(1px);
+    background: var(--lp-accent-active) !important;
+    border-color: var(--lp-accent-active) !important;
+}
+
+/* 键盘焦点：使用浏览器默认 :focus-visible 样式，不做自定义覆盖 */
+
+/*
+ * 禁用态。刻意分开处理：
+ * 主操作按钮在禁用时仍保留强调色的弱化填充，因为它是页面的视觉锚点——
+ * 若与次要按钮一样淡出，新用户打开页面第一眼会以为产品不可用。
+ * 次要按钮与上传按钮则正常淡出，不抢注意力。
+ */
+.lilo-upload-button:disabled,
+.lilo-action-secondary:disabled {
+    border-color: transparent !important;
+    background: var(--lp-surface-soft) !important;
+    color: var(--lp-text-disabled) !important;
+    opacity: var(--lp-opacity-disabled);
+}
+
+.lilo-action-primary:disabled {
+    border: 1px solid transparent !important;
+    background: var(--lp-accent-disabled-bg) !important;
+    color: var(--lp-accent-disabled) !important;
+    cursor: not-allowed;
+}
+
+.lilo-generation-panel {
+    padding: 20px !important;
+    border: 1px solid var(--lp-border-subtle);
+    border-radius: var(--lp-radius-card) !important;
+    background: var(--lp-surface-subtle) !important;
+    color: var(--lp-text-default);
+}
+
+.lilo-generation-panel label > span,
+.lilo-generation-panel > div > div > span {
+    color: var(--lp-text-muted) !important;
+    font-size: 12px !important;
+    font-weight: 400 !important;
+}
+
+.lilo-generation-panel select {
+    min-height: 40px;
+    padding: 8px 12px !important;
+    border: 1px solid var(--lp-border-subtle) !important;
+    border-radius: var(--lp-radius-control) !important;
+    background: var(--lp-surface) !important;
+    color: var(--lp-text-default) !important;
+    font-family: var(--font-app);
+    font-size: 14px;
+}
+
+.lilo-generation-panel select:focus {
+    border-color: var(--lp-border-strong) !important;
+}
+
+.lilo-generation-panel button {
+    border-color: var(--lp-border-subtle) !important;
+    border-radius: var(--lp-radius-control) !important;
+    background: var(--lp-surface) !important;
+    color: var(--lp-text-default) !important;
+}
+
+.lilo-generation-panel button.border-indigo-500 {
+    border-color: var(--lp-accent) !important;
+    background: var(--lp-accent-soft) !important;
+}
+
+.lilo-inspiration {
+    margin-bottom: 56px !important;
+}
+
+.lilo-inspiration h3 {
+    margin-bottom: 16px !important;
+    color: var(--lp-text-strong) !important;
+    font-size: 20px !important;
+    font-weight: 500 !important;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+}
+
+.lilo-inspiration-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px !important;
+}
+
+.lilo-inspiration-card {
+    position: relative;
+    min-height: 0;
+    overflow: hidden;
+    padding: 0 !important;
+    border: 1px solid var(--lp-border-subtle) !important;
+    border-radius: var(--lp-radius-card) !important;
+    background: var(--lp-surface) !important;
+    box-shadow: none !important;
+    transition: transform 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.lilo-inspiration-card:hover {
+    transform: translateY(-2px);
+    border-color: #22d3ee !important;
+    box-shadow: 0 6px 20px rgba(34, 211, 238, 0.18), var(--lp-shadow-card-hover) !important;
+}
+
+.lilo-inspiration-media {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background-position: center;
+    background-size: cover;
+}
+
+.lilo-inspiration-copy {
+    padding: 16px;
+    background: var(--lp-surface);
+}
+
+.lilo-inspiration-copy > div:first-child {
+    margin-bottom: 4px !important;
+    color: var(--lp-text-strong) !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    line-height: 1.5;
+}
+
+.lilo-inspiration-copy > div:last-child {
+    color: var(--lp-text-muted) !important;
+    font-size: 12px !important;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+.lilo-history {
+    max-width: 1040px !important;
+    padding-inline: 32px !important;
+}
+
+.lilo-history-card {
+    border-color: var(--lp-border-subtle) !important;
+    border-radius: var(--lp-radius-card) !important;
+    background: var(--lp-surface) !important;
+    box-shadow: none !important;
+}
+
+.lilo-history-card:hover {
+    border-color: var(--lp-border-strong) !important;
+    background: var(--lp-surface) !important;
+    box-shadow: none !important;
+}
+
+.lilo-history-card .group-hover\:text-blue-600 {
+    color: var(--lp-text-strong) !important;
+}
+
+.lilo-history-card .text-blue-600,
+.lilo-history-card .group-hover\:text-blue-400 {
+    color: var(--lp-accent) !important;
+}
+
+.lilo-dialog-scrim {
+    background: var(--lp-scrim-modal) !important;
+}
+
+.lilo-delete-dialog {
+    width: min(400px, calc(100vw - 32px)) !important;
+    padding: 32px !important;
+    border-radius: var(--lp-radius-feature) !important;
+    background: var(--lp-surface) !important;
+    box-shadow: var(--lp-shadow-modal) !important;
+}
+
+.lilo-delete-dialog h4 {
+    color: var(--lp-text-strong) !important;
+    font-size: 20px !important;
+    font-weight: 600 !important;
+}
+
+.lilo-delete-dialog p {
+    color: var(--lp-text-muted) !important;
+    font-size: 14px !important;
+    line-height: 1.6;
+}
+
+.lilo-delete-dialog button {
+    min-height: 44px;
+    border-radius: var(--lp-radius-control) !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+}
+
+.lilo-delete-dialog button:first-child {
+    border-color: var(--lp-border-subtle) !important;
+    background: var(--lp-surface) !important;
+    color: var(--lp-text-default) !important;
+}
+
+.lilo-delete-dialog button:first-child:hover {
+    border-color: var(--lp-border-strong) !important;
+    background: var(--lp-surface-hover) !important;
+}
+
+.lilo-delete-dialog button:last-child {
+    background: var(--lp-error) !important;
+    color: var(--lp-text-inverse) !important;
+}
+
+.lilo-delete-dialog button:last-child:hover {
+    background: var(--lp-error-hover) !important;
+}
+
+@media (max-width: 1103px) {
+    .lilo-main {
+        margin-left: 0 !important;
+    }
+
+    .lilo-sidebar {
+        box-shadow: var(--lp-shadow-popover) !important;
+    }
+
+    .lilo-home-main,
+    .lilo-history {
+        max-width: 920px !important;
+    }
+
+    .lilo-inspiration-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .lilo-composer-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .lilo-composer-toolbar > div:last-child {
+        justify-content: flex-end;
+        width: 100%;
+    }
+}
+
+@media (max-width: 640px) {
+    .lilo-sidebar {
+        width: min(15.5rem, calc(100vw - 16px)) !important;
+    }
+
+    .lilo-home-main,
+    .lilo-history {
+        padding-inline: 16px !important;
+    }
+
+    .lilo-home-main {
+        padding-top: 48px !important;
+    }
+
+    .lilo-hero-title h1 {
+        font-size: 24px !important;
+    }
+
+    .lilo-inspiration-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .lilo-composer {
+        border-radius: var(--lp-radius-card) !important;
+    }
+
+    .lilo-upload-button,
+    .lilo-action-secondary,
+    .lilo-action-primary,
+    .lilo-sparkle-button,
+    .cssbuttons-io-button {
+        flex: 1 1 auto;
+        justify-content: center;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ════════════════════════════════════════════════════════
+ * 阶段3-2 · 首页首屏体验优化（2026-09-23）
+ * 暗色画布 + 单一暖橙强调；动效遵循 prefers-reduced-motion
+ * ════════════════════════════════════════════════════════ */
+
+/* 背景氛围：顶部两处极淡的紫色光晕，不抢内容（呼应 GradientBlob 紫色系） */
+.lilo-home::before {
+    content: '' !important; /* 覆盖上方通用伪元素禁用 */
+    position: absolute;
+    top: -180px;
+    left: 50%;
+    width: 1040px;
+    height: 640px;
+    transform: translateX(-50%);
+    background:
+        radial-gradient(480px 300px at 30% 42%, rgba(160, 130, 245, 0.12), transparent 70%),
+        radial-gradient(420px 280px at 70% 32%, rgba(160, 130, 245, 0.08), transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.lilo-home-main {
+    position: relative;
+    z-index: 1;
+}
+
+/* Hero：tagline 用暖橙强调 */
+.lilo-hero-accent {
+    color: var(--lp-accent) !important;
+    font-weight: 600;
+}
+
+/* Hero：一句话流程引导条 */
+.lilo-hero-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.lilo-hero-flow-step {
+    padding: 5px 12px;
+    border: 1px solid var(--lp-border-subtle);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--lp-surface-subtle) 88%, transparent);
+    color: var(--lp-text-muted);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+}
+
+.lilo-hero-flow-arrow {
+    margin: 0 2px;
+    color: var(--lp-accent);
+    font-size: 12px;
+    opacity: 0.9;
+}
+
+/* Composer：聚焦时暖橙描边 + 柔和光晕 */
+.lilo-composer {
+    transition: border-color 120ms ease, box-shadow 220ms ease;
+}
+
+
+/* 示例卡片：hover 上浮更明显 + 图片微缩放 */
+.lilo-inspiration-card {
+    transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.lilo-inspiration-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(160, 130, 245, 0.5) !important;
+    box-shadow: 0 10px 24px rgba(31, 31, 38, 0.14), 0 0 0 1px rgba(160, 130, 245, 0.16) !important;
+}
+
+.lilo-inspiration-media {
+    transition: transform 340ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lilo-inspiration-card:hover .lilo-inspiration-media {
+    transform: scale(1.035);
+}
+
+.sandbox-page-bg {
+    background:
+        radial-gradient(60% 45% at 18% 12%, rgba(196, 132, 252, 0.16) 0%, transparent 60%),
+        radial-gradient(50% 40% at 85% 20%, rgba(139, 92, 246, 0.12) 0%, transparent 55%),
+        radial-gradient(40% 35% at 70% 88%, rgba(244, 114, 182, 0.08) 0%, transparent 60%),
+        linear-gradient(180deg, #f6f6fa 0%, #faf8ff 100%);
+    background-attachment: fixed;
+}
+
+/* ── 即梦式参数条：模型/比例/分辨率弹层 ── */
+.lilo-param-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 10px;
+    border-radius: 10px;
+    border: 1px solid var(--lp-border-subtle, #e5e1f0);
+    background: rgba(255, 255, 255, 0.65);
+    color: var(--lp-text-default, #374151);
+    font-size: 12px;
+    font-weight: 500;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    cursor: pointer;
+}
+.lilo-param-chip:hover {
+    border-color: #c4b5fd;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.12);
+}
+.lilo-param-popover {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    z-index: 40;
+    min-width: 230px;
+    max-height: 320px;
+    overflow-y: auto;
+    padding: 4px;
+    border-radius: 14px;
+    border: 1px solid rgba(196, 181, 253, 0.5);
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 12px 32px rgba(139, 92, 246, 0.16), 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+.lilo-popover-group-title {
+    padding: 6px 10px 3px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: #9ca3af;
+}
+.lilo-model-item {
+    width: 100%;
+    text-align: left;
+    padding: 7px 10px;
+    border-radius: 9px;
+    font-size: 12px;
+    color: #4b5563;
+    transition: background 0.15s ease, color 0.15s ease;
+    cursor: pointer;
+}
+.lilo-model-item:hover {
+    background: #f5f3ff;
+    color: #6d28d9;
+}
+.lilo-model-item.active {
+    background: #f5f3ff;
+    color: #6d28d9;
+    font-weight: 600;
+}
+.lilo-ratio-item {
+    padding: 6px 0;
+    border: 1px solid #e5e7eb;
+    border-radius: 9px;
+    font-size: 11px;
+    font-weight: 500;
+    color: #6b7280;
+    background: #fff;
+    transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+    cursor: pointer;
+}
+.lilo-ratio-item:hover {
+    border-color: #c4b5fd;
+}
+.lilo-ratio-item.active {
+    border-color: #a78bfa;
+    background: #f5f3ff;
+    color: #6d28d9;
+    font-weight: 600;
+}
+
+/* ── 创作类型预设：一键应用配方胶囊 ── */
+.lilo-presets {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.lilo-presets-label {
+    font-size: 12px;
+    color: var(--lp-text-muted);
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.lilo-presets-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.lilo-preset-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--lp-border-subtle);
+    background: rgba(255, 255, 255, 0.65);
+    color: var(--lp-text-default);
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 160ms ease;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+}
+
+.lilo-preset-chip:hover {
+    border-color: rgba(160, 130, 245, 0.6);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(160, 130, 245, 0.18);
+}
+
+.lilo-preset-chip:active {
+    transform: scale(0.97);
+}
+
+.lilo-preset-chip.active {
+    background: linear-gradient(135deg, #a855f7, #c084fc);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 6px 16px rgba(160, 130, 245, 0.35);
+}
+
+/* ── 灵感卡 3D 倾斜动效（指针跟随，取自 ProfileCard tilt 引擎） ── */
+.lilo-tilt-wrap {
+    perspective: 700px;
+    transform-style: preserve-3d;
+    width: 100%;
+    height: 100%;
+}
+
+.lilo-tilt-wrap .lilo-inspiration-card {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transform: translateZ(0) rotateX(0deg) rotateY(0deg) scale(1);
+    transition: transform 520ms cubic-bezier(0.16, 1, 0.3, 1), border-color 180ms ease, box-shadow 180ms ease;
+    will-change: transform;
+}
+
+.lilo-tilt-wrap.tilt-active .lilo-inspiration-card {
+    transition: transform 140ms ease-out;
+    transform: translateZ(14px) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg)) scale(1.02);
+    border-color: rgba(160, 130, 245, 0.5) !important;
+    box-shadow: 0 16px 32px rgba(31, 31, 38, 0.14), 0 0 0 1px rgba(160, 130, 245, 0.18) !important;
+}
+
+/* 指针高光跟随 */
+.lilo-inspiration-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: inherit;
+    background: radial-gradient(
+        circle at var(--pointer-x, 50%) var(--pointer-y, 50%),
+        rgba(255, 255, 255, 0.7) 0%,
+        rgba(196, 132, 252, 0.14) 34%,
+        transparent 62%
+    );
+    opacity: 0;
+    transition: opacity 300ms ease;
+    pointer-events: none;
+}
+
+.lilo-tilt-wrap.tilt-active .lilo-inspiration-card::after {
+    opacity: 1;
+}
+
+/* 卡片内容上浮，产生视差层次 */
+.lilo-tilt-wrap .lilo-inspiration-copy {
+    position: relative;
+    z-index: 2;
+    transform: translateZ(8px);
+}
+
+/* 图片层随指针微移，形成景深 */
+.lilo-tilt-wrap.tilt-active .lilo-inspiration-media {
+    transform: translate3d(
+        calc((var(--pointer-x, 50%) - 50) * 0.5px),
+        calc((var(--pointer-y, 50%) - 50) * 0.5px),
+        0
+    ) scale(1.035);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .lilo-tilt-wrap .lilo-inspiration-card,
+    .lilo-tilt-wrap.tilt-active .lilo-inspiration-card {
+        transform: none !important;
+        transition: none !important;
+    }
+    .lilo-tilt-wrap.tilt-active .lilo-inspiration-media {
+        transform: none !important;
+    }
+}
+
+/* 主操作按钮：按下微下沉 */
+.lilo-action-primary:active:not(:disabled) {
+    transform: translateY(1px) scale(0.99);
+}
+
+/* 首屏入场动效：标题 → 输入区 → 示例，依次淡入上浮 */
+@keyframes lilo-rise {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.lilo-hero-title {
+    animation: lilo-rise 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.lilo-composer {
+    animation: lilo-rise 520ms cubic-bezier(0.16, 1, 0.3, 1) 90ms both;
+}
+
+.lilo-inspiration {
+    animation: lilo-rise 520ms cubic-bezier(0.16, 1, 0.3, 1) 180ms both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .lilo-hero-title,
+    .lilo-composer,
+    .lilo-inspiration {
+        animation: none !important;
+    }
+
+    .lilo-inspiration-card:hover .lilo-inspiration-media {
+        transform: none !important;
+    }
+}
+
+
+/* ════════════════════════════════════════════════════════
+   「一键生成」霓虹紫 sparkle 按钮（Uiverse.io MuhammadHasann 思路）
+   亮色主题适配：默认深紫文字可见；hover/focus 黑底白字 + 紫光晕 + 旋转虚线环 + 星芒闪烁
+   ════════════════════════════════════════════════════════ */
+.lilo-sparkle-button {
+  --black-700: hsla(0 0% 12% / 1);
+  --border_radius: 9999px;
+  --transtion: 0.3s ease-in-out;
+  --offset: 2px;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transform-origin: center;
+  padding: 0.75rem 1.5rem;
+  background-color: transparent;
+  border: none;
+  border-radius: var(--border_radius);
+  transform: scale(calc(1 + (var(--active, 0) * 0.1)));
+  transition: transform var(--transtion);
+}
+
+.lilo-sparkle-button::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  background-color: var(--black-700);
+  border-radius: var(--border_radius);
+  box-shadow: inset 0 0.5px hsl(0, 0%, 100%), inset 0 -1px 2px 0 hsl(0, 0%, 0%),
+    0px 4px 10px -4px hsla(0 0% 0% / calc(1 - var(--active, 0))),
+    0 0 0 calc(var(--active, 0) * 0.375rem) hsl(260 97% 50% / 0.75);
+  transition: all var(--transtion);
+  z-index: 0;
+  opacity: var(--active, 0);
+}
+
+.lilo-sparkle-button::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  background-color: hsla(260 97% 61% / 0.75);
+  background-image: radial-gradient(
+      at 51% 89%,
+      hsla(266, 45%, 74%, 1) 0px,
+      transparent 50%
+    ),
+    radial-gradient(at 100% 100%, hsla(266, 36%, 60%, 1) 0px, transparent 50%),
+    radial-gradient(at 22% 91%, hsla(266, 36%, 60%, 1) 0px, transparent 50%);
+  background-position: top;
+  opacity: var(--active, 0);
+  border-radius: var(--border_radius);
+  transition: opacity var(--transtion);
+  z-index: 2;
+}
+
+.lilo-sparkle-button:is(:hover, :focus-visible):not(:disabled) {
+  --active: 1;
+}
+
+.lilo-sparkle-button:active:not(:disabled) {
+  transform: scale(1);
+}
+
+.lilo-sparkle-button .dots_border {
+  --size_border: calc(100% + 2px);
+  overflow: hidden;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: var(--size_border);
+  height: var(--size_border);
+  background-color: transparent;
+  border-radius: var(--border_radius);
+  z-index: -10;
+}
+
+.lilo-sparkle-button .dots_border::before {
+  content: "";
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transform-origin: left;
+  transform: rotate(0deg);
+  width: 100%;
+  height: 2rem;
+  background-color: white;
+  mask: linear-gradient(transparent 0%, white 120%);
+  animation: lilo-sparkle-rotate 2s linear infinite;
+}
+
+@keyframes lilo-sparkle-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.lilo-sparkle-button .sparkle {
+  position: relative;
+  z-index: 10;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.lilo-sparkle-button .sparkle .path {
+  fill: currentColor;
+  stroke: currentColor;
+  transform-origin: center;
+  color: hsla(260, 45%, 34%, 1); /* 亮色主题默认可见的深紫；hover 时切换为白 */
+}
+
+.lilo-sparkle-button:is(:hover, :focus-visible):not(:disabled) .sparkle .path {
+  color: hsl(0, 0%, 100%);
+  animation: lilo-sparkle-path 1.5s linear 0.5s infinite;
+}
+
+.lilo-sparkle-button .sparkle .path:nth-child(1) {
+  --scale_path_1: 1.2;
+}
+
+.lilo-sparkle-button .sparkle .path:nth-child(2) {
+  --scale_path_2: 1.2;
+}
+
+.lilo-sparkle-button .sparkle .path:nth-child(3) {
+  --scale_path_3: 1.2;
+}
+
+@keyframes lilo-sparkle-path {
+  0%,
+  34%,
+  71%,
+  100% {
+    transform: scale(1);
+  }
+  17% {
+    transform: scale(var(--scale_path_1, 1));
+  }
+  49% {
+    transform: scale(var(--scale_path_2, 1));
+  }
+  83% {
+    transform: scale(var(--scale_path_3, 1));
+  }
+}
+
+.lilo-sparkle-button .text_button {
+  position: relative;
+  z-index: 10;
+  background-image: linear-gradient(90deg, hsla(260, 45%, 34%, 1) 0%, hsla(260, 45%, 34%, 1) 120%);
+  background-clip: text;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: transparent;
+}
+
+.lilo-sparkle-button:is(:hover, :focus-visible):not(:disabled) .text_button {
+  background-image: linear-gradient(90deg, hsl(0 0% 100% / 1) 0%, hsl(0 0% 100% / 1) 120%);
+}
+
+.lilo-sparkle-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+
+/* ════════════════════════════════════════════════════════
+   「开始创作」io-button 样式（Uiverse.io adamgiebl 思路）
+   紫底白字 + 右侧白色图标；hover 图标展开覆盖整个按钮；disabled 淡出
+   ════════════════════════════════════════════════════════ */
+.cssbuttons-io-button {
+  background: #a370f0;
+  color: white;
+  font-family: inherit;
+  padding: 0.35em;
+  padding-left: 1.2em;
+  font-size: 17px;
+  font-weight: 500;
+  border-radius: 0.9em;
+  border: none;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  box-shadow: inset 0 0 1.6em -0.6em #714da6;
+  overflow: hidden;
+  position: relative;
+  height: 2.8em;
+  padding-right: 3.3em;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.cssbuttons-io-button .icon {
+  background: white;
+  margin-left: 1em;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.2em;
+  width: 2.2em;
+  border-radius: 0.7em;
+  box-shadow: 0.1em 0.1em 0.6em 0.2em #7b52b9;
+  right: 0.3em;
+  transition: all 0.3s;
+}
+
+.cssbuttons-io-button:hover:not(:disabled) .icon {
+  width: calc(100% - 0.6em);
+}
+
+.cssbuttons-io-button .icon svg {
+  width: 1.1em;
+  height: 1.1em;
+  transition: transform 0.3s;
+  color: #7b52b9;
+}
+
+.cssbuttons-io-button:hover:not(:disabled) .icon svg {
+  transform: translateX(0.1em);
+}
+
+.cssbuttons-io-button:active:not(:disabled) .icon {
+  transform: scale(0.95);
+}
+
+.cssbuttons-io-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Pipeline 页面主视觉（文艺/动作/数字人头部卡片）── */
+.lilo-pipeline-hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 28px 32px;
+    border-radius: 24px;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.10), rgba(244, 114, 182, 0.08) 45%, rgba(34, 211, 238, 0.06));
+    border: 1px solid rgba(139, 92, 246, 0.16);
+    backdrop-filter: blur(12px);
+}
+.lilo-pipeline-hero-glow {
+    position: absolute;
+    width: 220px;
+    height: 220px;
+    right: -60px;
+    top: -80px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.35), transparent 65%);
+    filter: blur(30px);
+    pointer-events: none;
+}
+.lilo-pipeline-hero-icon {
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 18px;
+    color: #fff;
+    background: linear-gradient(135deg, #8b5cf6, #d946ef);
+    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.35);
+}
+.lilo-pipeline-hero-copy { position: relative; min-width: 0; }
+.lilo-pipeline-hero-title {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: #1f2937;
+    margin: 0;
+}
+.lilo-pipeline-hero-subtitle {
+    font-size: 13px;
+    color: #6b7280;
+    margin-top: 6px;
+    line-height: 1.5;
+}
+
+/* ── Pipeline 创作工作台结构（三页共用框架）── */
+.lilo-pipeline-canvas {
+    background:
+        radial-gradient(1200px 500px at 15% -10%, rgba(139, 92, 246, 0.10), transparent 60%),
+        radial-gradient(1000px 460px at 92% 0%, rgba(217, 70, 239, 0.07), transparent 55%),
+        radial-gradient(900px 420px at 60% 110%, rgba(34, 211, 238, 0.05), transparent 60%),
+        linear-gradient(180deg, #faf7ff 0%, #ffffff 60%);
+}
+.lilo-panel-card {
+    background: rgba(255, 255, 255, 0.84);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(139, 92, 246, 0.14);
+    border-radius: 24px;
+    box-shadow: 0 2px 10px rgba(88, 28, 135, 0.05), 0 10px 30px rgba(88, 28, 135, 0.04);
+}
+.lilo-tip-bar {
+    background: linear-gradient(90deg, rgba(139, 92, 246, 0.07), rgba(217, 70, 239, 0.05));
+    border: 1px solid rgba(139, 92, 246, 0.16);
+    border-radius: 14px;
+}
+.lilo-tip-title { color: #6d28d9; }
+.lilo-tip-text { color: #4c1d95; }

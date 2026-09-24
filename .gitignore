@@ -1,0 +1,45 @@
+# 环境与密钥
+.env
+.env.*
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+
+# Node
+node_modules/
+.next/
+out/
+build/
+*.tsbuildinfo
+
+# 本地配置与密钥
+config.yaml
+src/backend/config.yaml
+
+# 内部文档：含未加固项清单（无鉴权接口等），不对外发布，本地保留
+docs/阶段文档/后端缺口盘点.md
+
+# 内置第三方二进制：体积大且可重新下载，不进版本库
+# （单个 ffmpeg 约 77MB，进了 git 历史就永久留在那里，无法用 .gitignore 补救）
+# 由 install.sh 下载，见「安装 ffmpeg」一节
+src/backend/bin/
+
+# 运行产物与数据
+src/backend/code/
+src/backend/temp/
+src/backend/logs/
+data/
+
+# 系统与编辑器
+.DS_Store
+.Spotlight-V100
+.Trashes
+.vscode/
+.claude/
+.idea/
+*.zip
+

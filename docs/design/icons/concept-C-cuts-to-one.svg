@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  方向 C：连成一线（Cuts to One）
+  取意「分镜逐格生成，最后连成一条片」。
+  三条长短不一的横杠代表尚未成形的片段，右侧汇聚为一个播放符代表成片。
+  优点：直接表达产品的核心差异——不是单点生成，而是流水线交付。
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Lilovideo">
+  <defs>
+    <linearGradient id="aC-grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#FF9A6B"/>
+      <stop offset="100%" stop-color="#E8642F"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="0" width="64" height="64" rx="14" fill="#1B1B23"/>
+
+  <!-- 三段尚未成形的片段：长度不同，暗示分镜逐格推进 -->
+  <g stroke="url(#aC-grad)" stroke-width="3.4" stroke-linecap="round">
+    <path d="M13 22 H27"/>
+    <path d="M13 32 H24"/>
+    <path d="M13 42 H27"/>
+  </g>
+
+  <!-- 汇聚为成片：播放符 -->
+  <path d="M36 24 L52 32 L36 40 Z"
+        fill="#FF7A45" stroke="#FF7A45" stroke-width="2.4" stroke-linejoin="round"/>
+</svg>

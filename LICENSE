@@ -1,0 +1,48 @@
+MIT License
+
+Copyright (c) 2026 Lilovideo
+
+---
+
+## 上游来源声明 / Upstream Attribution
+
+本项目的部分基础实现来自以下开源项目（均为 MIT 许可）。根据 MIT 许可条款，
+下列版权声明必须随本软件一并保留：
+
+This project is built in part upon the following open-source projects (both MIT
+licensed). Their copyright notices are retained here as required by the MIT License:
+
+- **XiaoYunQue** — Copyright (c) 2026 XiaoYunQue (Innate Labs)
+  https://github.com/Innate-Labs/xiaoyunque
+
+- **Video-Claw / FilmAgent** — Copyright (c) 2026 Video-Claw / FilmAgent
+  https://github.com/HITsz-TMG/FilmAgent
+
+### 本项目新增与修改的内容
+
+以下内容由 Lilovideo 独立开发，不属于上游项目：
+
+- 品牌体系、界面文案与产品身份（`frontend/config/brand.ts`）
+- 产品需求文档、范围分级与演示策略
+- 成本核算、单镜头重做、停点确认等产品化改造
+- 前端视觉与交互调整
+
+---
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

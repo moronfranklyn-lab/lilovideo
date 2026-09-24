@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>图标方案对比</title>
+<style>
+  :root {
+    --accent: #FF7A45;
+    --surface: #1B1B23;
+    --canvas: #0D0D12;
+    --line: #2B2B36;
+    --text: #F0F0F5;
+    --text-2: #A0A0B0;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 40px;
+    background: var(--canvas); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", system-ui, sans-serif;
+  }
+  h1 { font-size: 22px; font-weight: 600; margin: 0 0 6px; letter-spacing: -0.3px; }
+  .sub { color: var(--text-2); font-size: 13px; margin-bottom: 32px; }
+
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 16px; padding: 20px;
+  }
+  .name { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .why { font-size: 12px; color: var(--text-2); line-height: 1.5; min-height: 54px; }
+
+  .big { display: flex; justify-content: center; padding: 12px 0 16px; }
+  .big img { width: 96px; height: 96px; }
+
+  .sizes { display: flex; align-items: flex-end; gap: 14px; justify-content: center;
+           padding: 14px 0; border-top: 1px solid var(--line); }
+  .sizes img { display: block; }
+
+  .rowlabel { font-size: 11px; color: var(--text-2); margin: 0 0 8px; }
+  .onlight { background: #F4F4F7; border-radius: 10px; padding: 12px; margin-top: 12px;
+             display: flex; align-items: center; gap: 12px; }
+  .onlight .wordmark { color: #1B1B23; font-weight: 600; font-size: 14px; }
+  .wordmark { font-weight: 600; font-size: 14px; }
+
+  /* 与真实界面同款的侧栏条，验证实际使用场景 */
+  .rail {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 12px; padding: 10px 14px; margin-top: 12px;
+  }
+  .rail img { width: 28px; height: 28px; }
+</style>
+</head>
+<body>
+  <h1>图标方案对比</h1>
+  <div class="sub">同一符号在 96 / 32 / 16 px 下是否都清晰，以及与产品名并排时的观感</div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="name">A · 光圈</div>
+      <div class="why">镜头是视频的起点。六片光圈叶构成负空间，中心一点光。几何感强，小尺寸轮廓清晰。</div>
+      <div class="big"><img src="concept-A-aperture.svg" alt="A"></div>
+      <div class="rowlabel">尺寸递减</div>
+      <div class="sizes">
+        <img src="concept-A-aperture.svg" width="32" height="32" alt="">
+        <img src="concept-A-aperture.svg" width="24" height="24" alt="">
+        <img src="concept-A-aperture.svg" width="16" height="16" alt="">
+      </div>
+      <div class="rail"><img src="concept-A-aperture.svg" alt=""><span class="wordmark">Lilovideo</span></div>
+      <div class="onlight"><img src="concept-A-aperture.svg" width="28" height="28" alt=""><span class="wordmark">Lilovideo</span></div>
+    </div>
+
+    <div class="card">
+      <div class="name">B · 框中有光</div>
+      <div class="why">分镜画幅 + 播放符 + 右上点子。语义最直白，一眼看出是视频产品，呼应「一句话进来」。</div>
+      <div class="big"><img src="concept-B-play-frame.svg" alt="B"></div>
+      <div class="rowlabel">尺寸递减</div>
+      <div class="sizes">
+        <img src="concept-B-play-frame.svg" width="32" height="32" alt="">
+        <img src="concept-B-play-frame.svg" width="24" height="24" alt="">
+        <img src="concept-B-play-frame.svg" width="16" height="16" alt="">
+      </div>
+      <div class="rail"><img src="concept-B-play-frame.svg" alt=""><span class="wordmark">Lilovideo</span></div>
+      <div class="onlight"><img src="concept-B-play-frame.svg" width="28" height="28" alt=""><span class="wordmark">Lilovideo</span></div>
+    </div>
+
+    <div class="card">
+      <div class="name">C · 连成一线</div>
+      <div class="why">三段未成形的片段汇聚为一个播放符。表达核心差异：不是单点生成，而是流水线交付。</div>
+      <div class="big"><img src="concept-C-cuts-to-one.svg" alt="C"></div>
+      <div class="rowlabel">尺寸递减</div>
+      <div class="sizes">
+        <img src="concept-C-cuts-to-one.svg" width="32" height="32" alt="">
+        <img src="concept-C-cuts-to-one.svg" width="24" height="24" alt="">
+        <img src="concept-C-cuts-to-one.svg" width="16" height="16" alt="">
+      </div>
+      <div class="rail"><img src="concept-C-cuts-to-one.svg" alt=""><span class="wordmark">Lilovideo</span></div>
+      <div class="onlight"><img src="concept-C-cuts-to-one.svg" width="28" height="28" alt=""><span class="wordmark">Lilovideo</span></div>
+    </div>
+
+    <div class="card">
+      <div class="name">D · 字标 L</div>
+      <div class="why">字母 L 与播放三角合并。最容易记住，更像品牌而非功能图标；语义不如 A、B 直白。</div>
+      <div class="big"><img src="concept-D-monogram-l.svg" alt="D"></div>
+      <div class="rowlabel">尺寸递减</div>
+      <div class="sizes">
+        <img src="concept-D-monogram-l.svg" width="32" height="32" alt="">
+        <img src="concept-D-monogram-l.svg" width="24" height="24" alt="">
+        <img src="concept-D-monogram-l.svg" width="16" height="16" alt="">
+      </div>
+      <div class="rail"><img src="concept-D-monogram-l.svg" alt=""><span class="wordmark">Lilovideo</span></div>
+      <div class="onlight"><img src="concept-D-monogram-l.svg" width="28" height="28" alt=""><span class="wordmark">Lilovideo</span></div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>定稿图标 · 多尺寸验证</title>
+<style>
+  body {
+    margin: 0; padding: 32px;
+    background: #0D0D12; color: #F0F0F5;
+    font-family: -apple-system, "PingFang SC", system-ui, sans-serif;
+  }
+  h1 { font-size: 18px; font-weight: 600; margin: 0 0 4px; }
+  .sub { color: #A0A0B0; font-size: 12px; margin-bottom: 26px; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { padding: 12px 14px; border-bottom: 1px solid #2B2B36; vertical-align: middle; }
+  th { font-size: 11px; color: #A0A0B0; font-weight: 500; text-align: center; }
+  td.name { font-size: 13px; font-weight: 600; white-space: nowrap; }
+  td.cell { text-align: center; }
+  .zw {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: #15151B; border: 1px solid #2B2B36; border-radius: 8px; padding: 6px;
+  }
+  /* 浏览器标签页模拟 */
+  .tab {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: #1B1B23; border: 1px solid #2B2B36;
+    border-radius: 8px 8px 0 0; padding: 7px 14px 7px 10px;
+    font-size: 12px; color: #D2D2DD;
+  }
+  .tab img { display: block; }
+  .rail {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: #1B1B23; border: 1px solid #2B2B36; border-radius: 10px; padding: 8px 14px;
+  }
+  .rail img { display: block; }
+  .rail span { font-size: 14px; font-weight: 600; }
+  .verdict { font-size: 12px; color: #4FD79B; }
+</style>
+</head>
+<body>
+  <h1>定稿图标 · 多尺寸验证</h1>
+  <div class="sub">主图标用于 ≥32px；小尺寸变体用于 ≤24px。16px 一列放大 6 倍检视残留结构。</div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="text-align:left">版本</th>
+        <th>64 px</th><th>32 px</th><th>24 px</th><th>16 px</th>
+        <th>16px 放大 6 倍</th>
+        <th style="text-align:left">浏览器标签页实景</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="name">主图标</td>
+        <td class="cell"><img src="lilovideo-icon.svg?v=2" width="64" height="64" alt=""></td>
+        <td class="cell"><img src="lilovideo-icon.svg?v=2" width="32" height="32" alt=""></td>
+        <td class="cell"><img src="lilovideo-icon.svg?v=2" width="24" height="24" alt=""></td>
+        <td class="cell"><img src="lilovideo-icon.svg?v=2" width="16" height="16" alt=""></td>
+        <td class="cell"><span class="zw"><img src="lilovideo-icon.svg?v=2" width="96" height="96" style="image-rendering:pixelated" alt=""></span></td>
+        <td class="cell"><span class="tab"><img src="lilovideo-icon.svg?v=2" width="16" height="16" alt="">Lilovideo</span></td>
+      </tr>
+      <tr>
+        <td class="name">小尺寸变体</td>
+        <td class="cell"><img src="lilovideo-icon-small.svg?v=2" width="64" height="64" alt=""></td>
+        <td class="cell"><img src="lilovideo-icon-small.svg?v=2" width="32" height="32" alt=""></td>
+        <td class="cell"><img src="lilovideo-icon-small.svg?v=2" width="24" height="24" alt=""></td>
+        <td class="cell"><img src="lilovideo-icon-small.svg?v=2" width="16" height="16" alt=""></td>
+        <td class="cell"><span class="zw"><img src="lilovideo-icon-small.svg?v=2" width="96" height="96" style="image-rendering:pixelated" alt=""></span></td>
+        <td class="cell"><span class="tab"><img src="lilovideo-icon-small.svg?v=2" width="16" height="16" alt="">Lilovideo</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="margin-top:28px">
+    <div class="sub" style="margin-bottom:12px">实际使用位置</div>
+    <div style="display:flex; gap:16px; align-items:center; flex-wrap:wrap">
+      <span class="rail"><img src="lilovideo-icon.svg?v=2" width="28" height="28" alt=""><span>侧栏（28px）</span></span>
+      <span class="rail"><img src="lilovideo-icon-small.svg?v=2" width="20" height="20" alt=""><span>紧凑导航（20px）</span></span>
+      <span class="tab"><img src="lilovideo-icon-small.svg?v=2" width="16" height="16" alt="">浏览器标签页（16px）</span>
+      <span class="rail"><img src="lilovideo-icon.svg?v=2" width="40" height="40" alt=""><span>应用图标（40px）</span></span>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>图标最终选择</title>
+<style>
+  body { margin: 0; padding: 30px; background: #0D0D12; color: #F0F0F5;
+         font-family: -apple-system, "PingFang SC", system-ui, sans-serif; }
+  h1 { font-size: 17px; font-weight: 600; margin: 0 0 4px; }
+  .sub { color: #A0A0B0; font-size: 12px; margin-bottom: 24px; }
+  .row { display: grid; grid-template-columns: 130px 1fr; gap: 20px;
+         align-items: center; padding: 18px 0; border-bottom: 1px solid #2B2B36; }
+  .label { font-size: 13px; font-weight: 600; }
+  .label small { display: block; font-weight: 400; color: #A0A0B0; font-size: 11px; margin-top: 3px; }
+  .strip { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+  .zoom { display: inline-flex; align-items: center; justify-content: center;
+          background: #15151B; border: 1px solid #2B2B36; border-radius: 8px; padding: 5px; }
+  .zoom img { image-rendering: pixelated; display: block; }
+  .verdict { font-size: 11px; padding: 3px 8px; border-radius: 999px; }
+  .win { background: rgba(79,215,155,0.14); color: #6EE0AD; }
+  .lose { background: rgba(244,112,111,0.14); color: #F4706F; }
+</style>
+</head>
+<body>
+  <h1>图标最终选择</h1>
+  <div class="sub">两套变体在同一行的真实尺寸并排。16px 一列放大 7 倍，用于判断该尺寸下还剩多少结构。</div>
+
+  <div class="row">
+    <div class="label">主图标<small>框较细 · 带创意点</small></div>
+    <div class="strip">
+      <img src="lilovideo-icon.svg?v=3" width="64" height="64" alt="">
+      <img src="lilovideo-icon.svg?v=3" width="32" height="32" alt="">
+      <img src="lilovideo-icon.svg?v=3" width="24" height="24" alt="">
+      <img src="lilovideo-icon.svg?v=3" width="16" height="16" alt="">
+      <span class="zoom"><img src="lilovideo-icon.svg?v=3" width="112" height="112" alt=""></span>
+      <span class="verdict lose">16px 三角偏小、创意点成噪点</span>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="label">小尺寸变体<small>框更粗 · 无创意点</small></div>
+    <div class="strip">
+      <img src="lilovideo-icon-small.svg?v=3" width="64" height="64" alt="">
+      <img src="lilovideo-icon-small.svg?v=3" width="32" height="32" alt="">
+      <img src="lilovideo-icon-small.svg?v=3" width="24" height="24" alt="">
+      <img src="lilovideo-icon-small.svg?v=3" width="16" height="16" alt="">
+      <span class="zoom"><img src="lilovideo-icon-small.svg?v=3" width="112" height="112" alt=""></span>
+      <span class="verdict win">16px 结构完整，可辨识</span>
+    </div>
+  </div>
+
+  <div style="margin-top:26px">
+    <div class="sub" style="margin-bottom:10px">浏览器标签页实景（真实 16px）</div>
+    <div style="display:flex; gap:14px">
+      <span style="display:inline-flex;align-items:center;gap:7px;background:#1B1B23;border:1px solid #2B2B36;border-radius:8px 8px 0 0;padding:7px 14px 7px 10px;font-size:12px;color:#D2D2DD">
+        <img src="lilovideo-icon.svg?v=3" width="16" height="16" alt="">Lilovideo
+      </span>
+      <span style="display:inline-flex;align-items:center;gap:7px;background:#1B1B23;border:1px solid #2B2B36;border-radius:8px 8px 0 0;padding:7px 14px 7px 10px;font-size:12px;color:#D2D2DD">
+        <img src="lilovideo-icon-small.svg?v=3" width="16" height="16" alt="">Lilovideo
+      </span>
+    </div>
+  </div>
+</body>
+</html>

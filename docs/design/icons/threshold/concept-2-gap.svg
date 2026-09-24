@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  概念 2 · 缺口（阈值）
+  谱系：日本纹章（Kamon）
+  种子：门槛不是墙，是墙上的那一处不连续。
+
+  构造：一个粗笔画圆角方框，只有一条边是断开的。断口处是一小段
+  与画框同向的实心短笔，表示「门还开着一条缝」。
+  读法：序列里那个不连续的点，就是可以让静止开始运动的地方。
+
+  技法说明：
+  - 线框用 stroke 画（stroke-width 4，落在规范要求的 3-4 区间）。
+  - 断口靠 path 不留闭合来形成，不是用背景色遮挡。
+  - 断口两侧端点为圆头，与整体圆角语言一致。
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Lilovideo">
+  <g id="mark" fill="none" stroke="#FF7A45" stroke-width="4"
+     stroke-linecap="round" stroke-linejoin="round">
+    <!-- 画框：从右上角断开一截 -->
+    <path id="frame-gap" d="M62 18 H26 a8 8 0 0 0 -8 8 V74 a8 8 0 0 0 8 8 H74 a8 8 0 0 0 8 -8 V38"/>
+    <!-- 门缝：与画框同向的一小段，落在断口内侧 -->
+    <path id="door-ajar" d="M70 30 V46"/>
+  </g>
+</svg>

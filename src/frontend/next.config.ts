@@ -2,9 +2,25 @@ import type { NextConfig } from "next";
 
 const backendApiUrl = (process.env.BACKEND_API_URL || 'http://127.0.0.1:8000').replace(/\/$/, '');
 
+/**
+ * 单端口部署模式：把前端静态导出，交给后端（FastAPI）一起托管。
+ *
+ * 为什么值得这么做：
+ *   现在前端靠 `rewrites()` 把 30 条 `/api/*` 逐条代理到后端。这套代理漏配过**三次**
+ *   （/api/cost/*、/api/credits/*、/api/models/*），症状都是"直连后端 200、经前端 404"。
+ *   静态导出后前端与后端**同源**，一个代理规则都不需要，这一整类问题从根上消失。
+ *
+ * 开启方式：构建时设 NEXT_OUTPUT=export。
+ * 不开时（含 `next dev`）保持原样：前端 3000、后端 8000，走 rewrites 代理。
+ */
+const isStaticExport = process.env.NEXT_OUTPUT === 'export';
+
 const nextConfig: NextConfig = {
+  ...(isStaticExport ? { output: 'export' as const, trailingSlash: true } : {}),
   agentRules: false,
   async rewrites() {
+    // 静态导出时前后端同源，没有可代理的对象；而且 output: 'export' 不允许 rewrites。
+    if (isStaticExport) return [];
     return [
       {
         source: '/code/:path*',

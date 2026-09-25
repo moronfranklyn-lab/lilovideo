@@ -99,39 +99,58 @@ Lilovideo 把视频生成从「赌一次抽卡」变成「可管控的生产线�
 - **后端**：Python + FastAPI。`core/orchestrator.py` 管理 6 阶段状态机与会话状态，
   各 `core/agents/*_agent.py` 实现单阶段逻辑，`models/` 封装各家模型客户端。
 - **前端**：Next.js + React + Tailwind。提供创作工作台、阶段确认、参数配置与产物预览。
-- 后端默认 `http://localhost:8000`，前端默认 `http://localhost:3000`。
+- **生产形态**：前端静态导出后由后端在 `http://localhost:8000` 一起托管（单进程单端口）；
+  开发时前端跑 `next dev` 在 `:3000`，通过 `rewrites` 代理到后端。
 
 ## 一键启动
 
 装好之后，**双击 `start.command`**（macOS）或在终端执行：
 
 ```bash
-bash scripts/launch.sh
+bash scripts/serve.sh
 ```
 
-它会依次：检查依赖 → 启动后端并等它就绪 → 启动前端 → 自动打开浏览器。
-停止用 `bash scripts/stop.sh`。
+前端会被**静态导出、由后端在同一个端口一起托管**——所以运行时只有**一个进程、一个地址**：
 
-启动器是**按"第一次用的人会怎么出错"设计的**，所以：
+```
+App: http://localhost:8000      ← 界面与接口都在这里
+```
+
+这不是"少一个端口"那么简单。前端原先靠 30 条代理规则把 `/api/*` 转发给后端，
+而这套规则**漏配过三次**（`/api/cost/*`、`/api/credits/*`、`/api/models/*`），
+症状都是「直连后端 200、经前端 404」。同源之后这类问题**从根上不存在**，
+同时也不需要 CORS、不需要 Node 运行时。
+
+### 两种模式
+
+| 模式 | 命令 | 端口 | 用途 |
+|---|---|---|---|
+| **单端口**（默认） | `bash scripts/serve.sh` | 8000 | 使用。一个进程，前端由后端托管 |
+| 开发 | `bash scripts/launch.sh` | 3000 + 8000 | 改前端代码，带热更新 |
+
+停止统一用 `bash scripts/stop.sh`。
+
+### 启动器按"第一次用会怎么出错"设计
 
 | 情况 | 行为 |
 |---|---|
-| 依赖没装齐 | 直接告诉你先跑 `install.sh`，而不是跑到一半失败 |
+| 依赖没装齐 | 直接告诉你先跑 `install.sh` |
+| 前端没构建 | 自动构建（约 1 分钟），而不是报错 |
 | 服务已经在跑 | 不重复启动，直接打开浏览器（幂等，随便点几次都没事） |
-| 只起了一半（比如后端在、前端不在） | **复用已在跑的那一半**，只补起缺的，不会把好的那个杀掉 |
-| 端口被别的程序占用 | 说清是哪个端口被谁占了，并给出换端口的命令 |
+| **后端进程比源码旧** | **明确警告**，并告诉你怎么重启——这个坑真实发生过：改了后端却复用旧进程，新接口一直 404 |
+| 端口被别的程序占用 | 说清哪个端口被谁占，并给出换端口的命令 |
 | 启动超时 | 打印日志末尾 20 行，而不是干等 |
-| 停止 | 递归停整棵进程树（`npm` → `next dev` → `next-server`），不留孤儿进程 |
+| 停止 | 递归停整棵进程树，不留孤儿进程 |
 
 常用参数：
 
 ```bash
-bash scripts/launch.sh --prod      # 生产模式（先 build，首屏更快）
-bash scripts/launch.sh --no-open   # 不自动开浏览器
-LILOVIDEO_BACKEND_PORT=8010 LILOVIDEO_FRONTEND_PORT=3010 bash scripts/launch.sh   # 换端口
+bash scripts/serve.sh --rebuild    # 强制重新构建前端
+bash scripts/serve.sh --no-open    # 不自动开浏览器
+LILOVIDEO_BACKEND_PORT=8010 bash scripts/serve.sh   # 换端口
 ```
 
-日志位置：`$TMPDIR/lilovideo/backend.log` 与 `frontend.log`。
+日志位置：`$TMPDIR/lilovideo/backend.log`。
 
 > **macOS 首次双击若提示"无法打开"**，是因为文件带了下载隔离属性，执行一次即可：
 > ```bash
@@ -153,7 +172,7 @@ LILOVIDEO_BACKEND_PORT=8010 LILOVIDEO_FRONTEND_PORT=3010 bash scripts/launch.sh 
 cd src
 bash install.sh
 cd ..
-bash scripts/launch.sh      # 或直接双击 start.command
+bash scripts/serve.sh       # 或直接双击 start.command
 ```
 
 ### 手动安装
@@ -222,7 +241,7 @@ npm run dev -- --webpack             # http://localhost:3000
 │   │       ├── brand.ts         # 品牌唯一源（改名只改这里）
 │   │       └── models.ts
 │   └── install.sh           # 一键安装
-├── scripts/                 # 启动 / 停止脚本（launch.sh / stop.sh）
+├── scripts/                 # serve.sh（单端口）/ launch.sh（开发）/ stop.sh
 ├── docs/                    # 文档
 │   ├── PRD/                     # 产品需求文档
 │   └── memory/                  # 项目状态与决策记录

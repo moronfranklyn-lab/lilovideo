@@ -216,6 +216,16 @@ stop_stale() {
 if [ "$backend_up" -eq 1 ]; then
   info "后端已在运行，复用（不重启）。"
   adopt_running "后端" "$BACKEND_PORT" "$API_PID"
+  # 进程在跑 ≠ 跑的是当前代码。这个坑真实发生过：改了后端源码却复用了旧进程，
+  # 结果新加的接口一直 404，白排查很久。这里主动提示。
+  if [ -f "$API_PID" ]; then
+    newer="$(find "$BACKEND_DIR" -name '*.py' -not -path '*/.venv/*' -not -path '*/__pycache__/*' \
+             -newer "$API_PID" -print -quit 2>/dev/null || true)"
+    if [ -n "${newer:-}" ]; then
+      warn "后端进程比源码旧（${newer#$BACKEND_DIR/} 有改动），它仍跑着旧代码。"
+      warn "要加载新代码：bash scripts/stop.sh && bash scripts/launch.sh"
+    fi
+  fi
 else
   stop_stale "后端" "$API_PID"
 fi

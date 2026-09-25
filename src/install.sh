@@ -134,6 +134,15 @@ fi
 info "Installing frontend dependencies..."
 (cd "$FRONTEND_DIR" && npm install) || fail "Frontend dependency install failed"
 
+# ---------- 构建前端（单端口模式需要）----------
+#
+# 前端会被**静态导出**，然后由后端在同一个端口一起托管。
+# 这样运行时只有一个进程、一个地址，也不需要 Node —— 详见 scripts/serve.sh 的说明。
+# 在这里构建而不是留到首次启动，是为了让"装完就能用"：
+# 构建失败也应该在安装阶段就暴露，而不是让用户第一次启动时撞上。
+info "Building frontend (static export, about 1 minute)..."
+(cd "$FRONTEND_DIR" && NEXT_OUTPUT=export npm run build) || fail "Frontend build failed"
+
 # ---------- 完成 ----------
 
 cat <<EOF
@@ -141,13 +150,20 @@ cat <<EOF
 [install] Lilovideo installation complete.
 
 Next steps:
-  1. Edit src/backend/config.yaml and fill in the API keys for the models you use.
-  2. Start the backend:
-       cd src/backend && .venv/bin/python api_server.py
-  3. Start the frontend (new terminal):
-       cd src/frontend && npm run dev -- --webpack
+  1. 填写 API Key（两种方式任选）：
+       - 启动后在网页「设置」页填写（推荐，不用碰文件）
+       - 或直接编辑 src/backend/config.yaml
+     注意：方舟（ARK）与百炼（DashScope）**两边都要填**——
+     方舟没有语言/视觉模型，百炼没有 Seedance 系列。
 
-  Backend: http://localhost:8000
-  Frontend: http://localhost:3000
+  2. 启动（一个进程、一个地址）：
+       bash scripts/serve.sh
+     或在 macOS 上直接双击仓库根目录的 start.command。
+     启动后在「设置」页点「核对可用模型」，可确认你的账号确实开通了这些模型。
+
+  App: http://localhost:8000      ← 前端与接口都在这个地址
+
+  开发时（前端热更新，双端口）改用：
+       bash scripts/launch.sh      # 前端 :3000 + 后端 :8000
 
 EOF

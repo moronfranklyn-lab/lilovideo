@@ -16,6 +16,12 @@ api_providers:
     api_key: ''
     base_url: https://generativelanguage.googleapis.com/v1beta
     enable_proxy: false
+  # 本项目默认把 DeepSeek 走**方舟托管的版本**（用方舟 Key），
+  # 所以 api_key 填方舟 Key，base_url 填方舟地址：
+  #   api_key:  <你的方舟 Key>
+  #   base_url: https://ark.cn-beijing.volces.com/api/v3
+  # 想改用 DeepSeek 官方平台，就把 api_key 换成官方 Key、base_url 换回：
+  #   base_url: https://api.deepseek.com/v1
   deepseek:
     api_key: ''
     base_url: https://api.deepseek.com/v1
@@ -33,15 +39,31 @@ api_providers:
     access_key: ''
     secret_key: ''
     enable_proxy: false
+# 下面的默认值全部经过实测可用（火山方舟 + 阿里云百炼）。
+#
+# **但你自己的账号未必开通了同样的模型。** 开通情况因账号而异，
+# 用不了时先核对你账号里到底有什么，再去改这里的 ID：
+#   方舟：curl -H "Authorization: Bearer $ARK_API_KEY" \
+#         https://ark.cn-beijing.volces.com/api/v3/models
+#   百炼：在控制台「模型广场」查看已开通模型
+#
+# 两个平台的分工：
+#   - 方舟（ARK）   —— 没有 LLM/VLM，只提供图像与视频
+#   - 百炼（通义）  —— 提供 LLM 与 VLM
+# 所以两边都要填 Key，缺一边会有阶段跑不起来。
 models:
-  llm: qwen3.5-plus
-  vlm: qwen3.5-plus
-  image_it2i: doubao-seedream-5-0-260128
-  image_t2i: doubao-seedream-5-0-260128
-  video: wan2.7-i2v
-  video_first_frame: wan2.7-i2v
-  video_start_end: wan2.7-i2v
-  video_reference: wan2.7-r2v
+  # LLM：DeepSeek V4.1 Flash，**由方舟托管**
+  # 因此需要把上面的 ark.api_key 也填到 deepseek.api_key，
+  # 且 deepseek.base_url 要改成方舟地址（见下方注释）。
+  llm: deepseek-v4-1-flash-260910
+  # VLM（图片评估）：通义
+  vlm: qwen3.7-plus
+  image_it2i: doubao-seedream-4-0-250828
+  image_t2i: doubao-seedream-4-0-250828
+  video: doubao-seedance-2-0-260128
+  video_first_frame: doubao-seedance-2-0-260128
+  video_start_end: doubao-seedance-2-0-260128
+  video_reference: doubao-seedance-2-0-260128
 generation:
   style: realistic
   video_ratio: '16:9'

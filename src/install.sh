@@ -37,21 +37,39 @@ check_command npm   || fail "npm is required (>= 9). Install it, then rerun."
 if ! check_command ffmpeg; then
   # 内置静态二进制。**不随仓库分发**（单个约 77MB，进了 git 历史无法回收），
   # 所以在这里按需下载到 src/backend/bin/，后端启动时会自动把它加进 PATH。
-  step "安装 ffmpeg（后期剪辑需要，约 80MB）"
+  #
+  # 注意：不同系统的静态构建不通用。装错架构的后果是**静默坏掉**——
+  # 后端会把 bin/ 前置到 PATH，于是错误的二进制盖住系统里正确的那个，
+  # 直到后期剪辑阶段才报一个看不懂的错。所以这里必须先判断系统。
   FFMPEG_DIR="$REPO_DIR/src/backend/bin"
   mkdir -p "$FFMPEG_DIR"
-  if curl -fsSL -o "$FFMPEG_DIR/ffmpeg.zip" https://evermeet.cx/ffmpeg/getrelease/zip; then
-    if unzip -o -q "$FFMPEG_DIR/ffmpeg.zip" -d "$FFMPEG_DIR"; then
-      rm -f "$FFMPEG_DIR/ffmpeg.zip"
-      xattr -dr com.apple.quarantine "$FFMPEG_DIR/ffmpeg" 2>/dev/null || true
-      info "ffmpeg 已安装到 src/backend/bin/"
-    else
-      warn "ffmpeg 解压失败，请手动解压到 $FFMPEG_DIR"
-    fi
-  else
-    warn "ffmpeg 下载失败（离线或网络受限）。后期剪辑会失败，可稍后重试："
-    warn "  curl -L -o $FFMPEG_DIR/ffmpeg.zip https://evermeet.cx/ffmpeg/getrelease/zip"
-  fi
+  case "$(uname -s)" in
+    Darwin)
+      step "安装 ffmpeg（macOS 静态构建，约 80MB）"
+      if curl -fsSL -o "$FFMPEG_DIR/ffmpeg.zip" https://evermeet.cx/ffmpeg/getrelease/zip \
+         && unzip -o -q "$FFMPEG_DIR/ffmpeg.zip" -d "$FFMPEG_DIR"; then
+        rm -f "$FFMPEG_DIR/ffmpeg.zip"
+        xattr -dr com.apple.quarantine "$FFMPEG_DIR/ffmpeg" 2>/dev/null || true
+        info "ffmpeg 已安装到 src/backend/bin/"
+      else
+        warn "ffmpeg 下载或解压失败，请手动放置到 $FFMPEG_DIR"
+        warn "  curl -L -o $FFMPEG_DIR/ffmpeg.zip https://evermeet.cx/ffmpeg/getrelease/zip"
+      fi
+      ;;
+    Linux)
+      # 不用内置二进制：Linux 各发行版/架构差异太大，静态构建容易装错。
+      # 交给系统包管理器，最省事也最不容易出问题。
+      warn "未检测到 ffmpeg。请用系统包管理器安装，例如："
+      warn "  Debian/Ubuntu:  sudo apt install -y ffmpeg"
+      warn "  Fedora/RHEL:    sudo dnf install -y ffmpeg"
+      warn "  Arch:           sudo pacman -S ffmpeg"
+      warn "未安装前，后期剪辑（视频拼接）阶段会失败，其余阶段可正常使用。"
+      ;;
+    *)
+      warn "当前系统（$(uname -s)）不在支持范围内。"
+      warn "本项目依赖 bash 与 POSIX 工具，Windows 请使用 WSL，或自行安装 ffmpeg。"
+      ;;
+  esac
 fi
 
 # ---------- 选择 Python ----------

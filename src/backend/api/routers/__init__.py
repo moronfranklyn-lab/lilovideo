@@ -10,6 +10,7 @@ from .pipelines import router as pipelines_router
 from .configuration import router as configuration_router
 from .cost import router as cost_router
 from .credits import router as credits_router
+from .models_check import router as models_check_router
 
 __all__ = [
     "health_router",
@@ -22,4 +23,5 @@ __all__ = [
     "configuration_router",
     "cost_router",
     "credits_router",
+    "models_check_router",
 ]

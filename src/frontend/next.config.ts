@@ -39,6 +39,14 @@ const nextConfig: NextConfig = {
         source: '/api/models',
         destination: `${backendApiUrl}/api/models`,
       },
+      // 上面那条是**精确匹配**，不覆盖子路径。
+      // `/api/models/available`、`/api/models/check` 要靠下面这条转发。
+      // 这个坑踩过三次了（/api/cost/*、/api/credits/*、/api/models/*），
+      // 现在有一条单测逐个前缀核对后端路由与这里是否对齐。
+      {
+        source: '/api/models/:path*',
+        destination: `${backendApiUrl}/api/models/:path*`,
+      },
       {
         source: '/api/config',
         destination: `${backendApiUrl}/api/config`,

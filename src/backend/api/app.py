@@ -24,6 +24,7 @@ from api.routers import (
     files_router,
     cost_router,
     credits_router,
+    models_check_router,
     health_router,
     pipelines_router,
     sandbox_router,
@@ -78,6 +79,7 @@ app.mount("/code", StaticFiles(directory=settings.CODE_DIR), name="code")
 app.include_router(health_router)
 app.include_router(cost_router)
 app.include_router(credits_router)
+app.include_router(models_check_router)
 app.include_router(files_router)
 app.include_router(workflow_router)
 app.include_router(sessions_router)

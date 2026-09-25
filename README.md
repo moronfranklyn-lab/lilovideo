@@ -101,6 +101,43 @@ Lilovideo 把视频生成从「赌一次抽卡」变成「可管控的生产线�
 - **前端**：Next.js + React + Tailwind。提供创作工作台、阶段确认、参数配置与产物预览。
 - 后端默认 `http://localhost:8000`，前端默认 `http://localhost:3000`。
 
+## 一键启动
+
+装好之后，**双击 `start.command`**（macOS）或在终端执行：
+
+```bash
+bash scripts/launch.sh
+```
+
+它会依次：检查依赖 → 启动后端并等它就绪 → 启动前端 → 自动打开浏览器。
+停止用 `bash scripts/stop.sh`。
+
+启动器是**按"第一次用的人会怎么出错"设计的**，所以：
+
+| 情况 | 行为 |
+|---|---|
+| 依赖没装齐 | 直接告诉你先跑 `install.sh`，而不是跑到一半失败 |
+| 服务已经在跑 | 不重复启动，直接打开浏览器（幂等，随便点几次都没事） |
+| 只起了一半（比如后端在、前端不在） | **复用已在跑的那一半**，只补起缺的，不会把好的那个杀掉 |
+| 端口被别的程序占用 | 说清是哪个端口被谁占了，并给出换端口的命令 |
+| 启动超时 | 打印日志末尾 20 行，而不是干等 |
+| 停止 | 递归停整棵进程树（`npm` → `next dev` → `next-server`），不留孤儿进程 |
+
+常用参数：
+
+```bash
+bash scripts/launch.sh --prod      # 生产模式（先 build，首屏更快）
+bash scripts/launch.sh --no-open   # 不自动开浏览器
+LILOVIDEO_BACKEND_PORT=8010 LILOVIDEO_FRONTEND_PORT=3010 bash scripts/launch.sh   # 换端口
+```
+
+日志位置：`$TMPDIR/lilovideo/backend.log` 与 `frontend.log`。
+
+> **macOS 首次双击若提示"无法打开"**，是因为文件带了下载隔离属性，执行一次即可：
+> ```bash
+> xattr -dr com.apple.quarantine .
+> ```
+
 ## 快速开始
 
 ### 环境要求
@@ -115,6 +152,8 @@ Lilovideo 把视频生成从「赌一次抽卡」变成「可管控的生产线�
 # 一键安装（检查依赖、装前后端依赖、生成 config.yaml）
 cd src
 bash install.sh
+cd ..
+bash scripts/launch.sh      # 或直接双击 start.command
 ```
 
 ### 手动安装
@@ -183,10 +222,12 @@ npm run dev -- --webpack             # http://localhost:3000
 │   │       ├── brand.ts         # 品牌唯一源（改名只改这里）
 │   │       └── models.ts
 │   └── install.sh           # 一键安装
+├── scripts/                 # 启动 / 停止脚本（launch.sh / stop.sh）
 ├── docs/                    # 文档
 │   ├── PRD/                     # 产品需求文档
 │   └── memory/                  # 项目状态与决策记录
-└── references/              # 流程与 API 操作手册
+├── references/              # 流程与 API 操作手册
+└── start.command            # macOS 双击启动入口
 ```
 
 ## 附加能力

@@ -177,6 +177,33 @@ function isProviderOptions(options: Field['options']): options is ProviderGroup[
   return Array.isArray(options) && options.some(option => 'models' in option);
 }
 
+/** 「核对可用模型」的结果。与后端 /api/models/check 的返回一一对应。 */
+interface SlotCheck {
+  slot: string;
+  label: string;
+  model_id: string;
+  provider: string | null;
+  provider_label: string;
+  available: boolean | null;
+  note: string;
+}
+
+interface ProviderCheck {
+  provider: string;
+  provider_label: string;
+  ok: boolean;
+  total: number;
+  error: string;
+  hint: string;
+}
+
+interface CheckResult {
+  configured: SlotCheck[];
+  missing: SlotCheck[];
+  all_available: boolean;
+  providers: Record<string, ProviderCheck>;
+}
+
 export default function SettingsPage() {
   const [config, setConfig] = useState<ConfigTree>({});
   const [path, setPath] = useState('');
@@ -190,6 +217,10 @@ export default function SettingsPage() {
   // 否则任何人都能改写 base_url 把模型请求（连同密钥）重定向走。
   const [configWritable, setConfigWritable] = useState(true);
   const [deployMode, setDeployMode] = useState<'local' | 'public'>('local');
+  // 模型可用性核对：用户填完 Key 后最需要的反馈——这套配置到底能不能跑
+  const [checking, setChecking] = useState(false);
+  const [checkResult, setCheckResult] = useState<CheckResult | null>(null);
+  const [checkError, setCheckError] = useState('');
 
   useEffect(() => {
     const load = async () => {
@@ -286,6 +317,21 @@ export default function SettingsPage() {
     }
   };
 
+  const runCheck = async () => {
+    setChecking(true);
+    setCheckError('');
+    setCheckResult(null);
+    try {
+      const resp = await fetch('/api/models/check');
+      if (!resp.ok) throw new Error(`核对失败（HTTP ${resp.status}）`);
+      setCheckResult(await resp.json());
+    } catch (e: any) {
+      setCheckError(e.message || '核对失败');
+    } finally {
+      setChecking(false);
+    }
+  };
+
   const updateSecretField = (field: Field, raw: string) => {
     setSecretDrafts(current => ({ ...current, [field.path]: raw }));
     setConfig(current => setValue(current, field.path, raw));
@@ -325,6 +371,91 @@ export default function SettingsPage() {
             </div>
           </div>
         )}
+
+        {/* 核对可用模型：填完 Key 后唯一的反馈渠道。
+            没有它，用户只能等到某个阶段跑失败才知道配置有问题，
+            而且很容易把"模型不在账号里"误读成"Key 填错了"。 */}
+        <section className="mb-6 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h2 className="text-sm font-semibold text-gray-800">核对可用模型</h2>
+              <p className="mt-1 text-xs text-gray-500">
+                用你填的 Key 去平台查询<b>你账号里真实开通</b>了哪些模型，并逐个核对上面配置的槽位。
+                建议保存配置后点一次——它能提前发现"模型没开通"或"模型 ID 写错"，
+                而不是等到生成到一半才失败。
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={runCheck}
+              disabled={checking}
+              className="flex-shrink-0 inline-flex items-center gap-1.5 rounded-lg border border-violet-200 bg-violet-50 px-3 py-1.5 text-xs font-medium text-violet-700 hover:bg-violet-100 disabled:opacity-50"
+            >
+              {checking ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <ShieldAlert className="w-3.5 h-3.5" />}
+              {checking ? '核对中…' : '开始核对'}
+            </button>
+          </div>
+
+          {checkError && (
+            <p className="mt-3 text-xs text-red-600">{checkError}</p>
+          )}
+
+          {checkResult && (
+            <div className="mt-4 space-y-3">
+              {Object.values(checkResult.providers).map(p => (
+                <div
+                  key={p.provider}
+                  className={`rounded-lg border p-2.5 text-xs ${
+                    p.ok ? 'border-gray-200 bg-gray-50' : 'border-amber-200 bg-amber-50'
+                  }`}
+                >
+                  <span className="font-medium text-gray-700">{p.provider_label}</span>
+                  {p.ok ? (
+                    <span className="ml-2 text-gray-500">账号可用 {p.total} 个模型</span>
+                  ) : (
+                    <span className="ml-2 text-amber-800">
+                      {p.error}
+                      {p.hint ? <span className="block mt-0.5 text-amber-700">{p.hint}</span> : null}
+                    </span>
+                  )}
+                </div>
+              ))}
+
+              <div className="divide-y divide-gray-100 rounded-lg border border-gray-200">
+                {checkResult.configured.map(row => (
+                  <div key={row.slot} className="flex items-start gap-2 p-2.5 text-xs">
+                    {row.available === true ? (
+                      <CheckCircle className="w-4 h-4 flex-shrink-0 text-emerald-500" />
+                    ) : row.available === false ? (
+                      <XCircle className="w-4 h-4 flex-shrink-0 text-red-500" />
+                    ) : (
+                      <Loader2 className="w-4 h-4 flex-shrink-0 text-gray-300" />
+                    )}
+                    <div className="min-w-0">
+                      <span className="text-gray-700">{row.label}</span>
+                      <span className="ml-2 font-mono text-[11px] text-gray-500">{row.model_id}</span>
+                      {row.note ? <p className="mt-0.5 text-red-600">{row.note}</p> : null}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {checkResult.all_available ? (
+                <p className="text-xs font-medium text-emerald-600">
+                  配置里的模型全部可用，可以开始创作了。
+                </p>
+              ) : checkResult.missing.length > 0 ? (
+                <p className="text-xs text-red-600">
+                  有 {checkResult.missing.length} 个槽位的模型在你账号里不可用，请按上面的说明处理。
+                </p>
+              ) : (
+                <p className="text-xs text-amber-700">
+                  有槽位无法判断（平台未核对成功），请先解决上面的平台错误。
+                </p>
+              )}
+            </div>
+          )}
+        </section>
 
         {loading ? (
           <div className="h-56 rounded-2xl border border-gray-200 bg-white flex items-center justify-center text-sm text-gray-400">
